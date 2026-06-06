@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doktorabc Glow — Aesthetic Injections</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A2B4A;
+    --rose: #C9506E;
+    --rose-light: #F5E8EE;
+    --rose-mid: #E8A0B0;
+    --teal: #0D9488;
+    --teal-light: #E0F4F2;
+    --gold: #D4A853;
+    --white: #FFFFFF;
+    --off: #FAF8F6;
+    --slate: #6B7280;
+    --light: #F3F4F6;
+    --border: #E5E7EB;
+    --shadow: 0 4px 24px rgba(26,43,74,0.10);
+    --shadow-lg: 0 8px 40px rgba(26,43,74,0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off);
+    color: var(--navy);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ═══════════════════════════════════════
+     LANDING PAGE
+  ═══════════════════════════════════════ */
+  #landing {
+    background: #FAF8F6;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .landing-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 100% 0%, rgba(201,80,110,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 0% 100%, rgba(13,148,136,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .landing-inner {
+    position: relative; z-index: 1;
+    max-width: 480px; margin: 0 auto;
+    padding: 48px 24px 40px;
+    display: flex; flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .logo-bar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 56px;
+  }
+
+  .logo-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--rose);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-dot svg { width: 16px; height: 16px; fill: white; }
+
+  .logo-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  .landing-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--rose-light);
+    border: 1px solid rgba(201,80,110,0.2);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px; color: var(--rose);
+    font-weight: 600; letter-spacing: 0.5px;
+    margin-bottom: 20px; align-self: flex-start;
+  }
+  .landing-badge::before { content: '●'; font-size: 8px; }
+
+  .landing-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 8vw, 44px);
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 20px;
+  }
+  .landing-headline em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .landing-sub {
+    font-size: 15px; line-height: 1.6;
+    color: var(--slate);
+    margin-bottom: 40px;
+    max-width: 360px;
+  }
+
+  /* Trust grid */
+  .trust-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+  .trust-pill {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 14px;
+    box-shadow: 0 1px 4px rgba(26,43,74,0.06);
+  }
+  .trust-pill-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .trust-pill-body {}
+  .trust-pill-title {
+    font-size: 12px; font-weight: 700;
+    color: var(--navy); margin-bottom: 2px;
+    line-height: 1.3;
+  }
+  .trust-pill-desc {
+    font-size: 11px; color: var(--slate);
+    line-height: 1.4;
+  }
+
+  /* CTA cards */
+  .cta-section { margin-top: auto; }
+  .cta-label {
+    font-size: 11px; font-weight: 600;
+    color: var(--slate);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .cta-cards { display: flex; flex-direction: column; gap: 12px; }
+
+  .cta-card {
+    border-radius: 16px;
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; gap: 16px;
+    border: none; text-align: left; width: 100%;
+  }
+  .cta-card:active { transform: scale(0.98); }
+
+  .cta-card.patient {
+    background: var(--rose);
+    box-shadow: 0 8px 32px rgba(201,80,110,0.35);
+  }
+  .cta-card.clinic {
+    background: white;
+    border: 1.5px solid var(--border);
+    box-shadow: 0 2px 12px rgba(26,43,74,0.07);
+  }
+
+  .cta-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .patient .cta-icon { background: rgba(255,255,255,0.25); }
+  .clinic .cta-icon { background: #E0F4F2; }
+
+  .cta-card-content { flex: 1; }
+  .cta-card-title {
+    font-size: 15px; font-weight: 600;
+    color: white; margin-bottom: 2px;
+  }
+  .clinic .cta-card-title { color: var(--navy); }
+  .cta-card-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+  }
+  .clinic .cta-card-desc { color: var(--slate); }
+
+  .cta-arrow {
+    font-size: 18px; color: rgba(255,255,255,0.6);
+  }
+  .clinic .cta-arrow { color: var(--slate); }
+
+  /* ═══════════════════════════════════════
+     SHARED FLOW STYLES
+  ═══════════════════════════════════════ */
+  .flow-header {
+    padding: 20px 20px 0;
+    max-width: 480px; margin: 0 auto; width: 100%;
+  }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none;
+    font-size: 13px; font-weight: 500;
+    color: var(--slate); cursor: pointer;
+    padding: 8px 0; margin-bottom: 16px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .back-btn:hover { color: var(--navy); }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-bottom: 24px;
+  }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--slate);
+    margin-bottom: 8px; font-weight: 500;
+  }
+  .progress-track {
+    height: 4px; background: var(--border);
+    border-radius: 100px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 100px;
+    transition: width 0.4s ease;
+  }
+  .patient-flow .progress-fill { background: var(--rose); }
+  .clinic-flow .progress-fill { background: var(--teal); }
+
+  /* Step indicator dots */
+  .step-dots {
+    display: flex; gap: 6px; margin-bottom: 4px;
+  }
+  .step-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border); transition: all 0.3s;
+  }
+  .patient-flow .step-dot.done { background: var(--rose); }
+  .patient-flow .step-dot.active { background: var(--rose); transform: scale(1.4); }
+  .clinic-flow .step-dot.done { background: var(--teal); }
+  .clinic-flow .step-dot.active { background: var(--teal); transform: scale(1.4); }
+
+  /* Flow content */
+  .flow-content {
+    flex: 1; overflow-y: auto;
+    padding: 0 20px 100px;
+    max-width: 480px; margin: 0 auto; width: 100%;
+  }
+
+  .step-panel { display: none; }
+  .step-panel.active { display: block; animation: fadeUp 0.3s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; line-height: 1.25;
+    margin-bottom: 6px; color: var(--navy);
+  }
+  .step-desc {
+    font-size: 13px; color: var(--slate);
+    line-height: 1.55; margin-bottom: 24px;
+  }
+
+  /* Form fields */
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-size: 12px; font-weight: 600;
+    color: var(--navy); letter-spacing: 0.3px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(201,80,110,0.10);
+  }
+  .clinic-flow .field input:focus,
+  .clinic-flow .field select:focus,
+  .clinic-flow .field textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(13,148,136,0.10);
+  }
+  .field textarea { resize: none; min-height: 90px; }
+
+  /* Radio/option cards */
+  .option-grid { display: flex; flex-direction: column; gap: 10px; }
+  .option-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px; cursor: pointer;
+    transition: all 0.2s; background: white;
+  }
+  .option-card input[type="radio"] { display: none; }
+  .option-card.selected {
+    border-color: var(--rose);
+    background: var(--rose-light);
+  }
+  .clinic-flow .option-card.selected {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .option-radio {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .option-card.selected .option-radio {
+    border-color: var(--rose);
+    background: var(--rose);
+  }
+  .clinic-flow .option-card.selected .option-radio {
+    border-color: var(--teal);
+    background: var(--teal);
+  }
+  .option-radio::after {
+    content: ''; width: 8px; height: 8px;
+    border-radius: 50%; background: white;
+    display: none;
+  }
+  .option-card.selected .option-radio::after { display: block; }
+
+  .option-text { flex: 1; }
+  .option-label { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .option-sublabel { font-size: 12px; color: var(--slate); margin-top: 1px; }
+  .option-emoji { font-size: 20px; }
+
+  /* Checkbox */
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] {
+    width: 18px; height: 18px; border-radius: 5px;
+    accent-color: var(--rose); flex-shrink: 0; margin-top: 1px;
+    cursor: pointer;
+  }
+  .clinic-flow .check-item input[type="checkbox"] { accent-color: var(--teal); }
+  .check-text { font-size: 13px; color: var(--slate); line-height: 1.45; }
+  .check-text strong { color: var(--navy); }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 14px; padding: 28px 20px;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s; background: white;
+    margin-bottom: 12px;
+  }
+  .upload-zone:hover {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .upload-zone.has-file {
+    border-color: var(--teal);
+    background: var(--teal-light);
+  }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .upload-desc { font-size: 12px; color: var(--slate); }
+  .upload-zone input { display: none; }
+
+  /* Info card */
+  .info-card {
+    background: white; border-radius: 14px;
+    padding: 16px; margin-bottom: 16px;
+    border: 1px solid var(--border);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .info-card .info-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .info-card .info-text { font-size: 13px; color: var(--slate); line-height: 1.5; }
+  .info-card .info-text strong { color: var(--navy); }
+
+  /* Warning card */
+  .warn-card {
+    background: #FFF8E6;
+    border: 1px solid #F0D080;
+    border-radius: 14px; padding: 14px 16px;
+    display: flex; gap: 10px;
+    font-size: 13px; color: #7A5200;
+    line-height: 1.5; margin-bottom: 16px;
+  }
+
+  /* Fixed bottom CTA */
+  .flow-footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 16px 20px 28px;
+    background: linear-gradient(to top, var(--off) 70%, transparent);
+    max-width: 480px; margin: 0 auto;
+  }
+  /* center the footer within the page */
+  @media (min-width: 520px) {
+    .flow-footer {
+      left: 50%; transform: translateX(-50%);
+      width: 480px;
+    }
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    border: none; border-radius: 14px;
+    font-size: 15px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .patient-flow .btn-primary {
+    background: var(--rose);
+    color: white;
+    box-shadow: 0 4px 20px rgba(201,80,110,0.3);
+  }
+  .clinic-flow .btn-primary {
+    background: var(--teal);
+    color: white;
+    box-shadow: 0 4px 20px rgba(13,148,136,0.25);
+  }
+
+  /* ── NEXT STEPS CARDS ── */
+  .next-steps { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+  .next-step-card {
+    background: white; border-radius: 14px;
+    padding: 16px; display: flex; gap: 14px;
+    align-items: flex-start;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .next-step-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+  .patient-next .next-step-num { background: var(--rose); }
+  .clinic-next .next-step-num { background: var(--teal); }
+  .next-step-body { flex: 1; }
+  .next-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .next-step-desc { font-size: 12px; color: var(--slate); line-height: 1.45; }
+  .next-step-tag {
+    display: inline-flex; align-items: center;
+    font-size: 11px; font-weight: 600;
+    border-radius: 100px; padding: 3px 10px;
+    margin-top: 6px;
+  }
+  .patient-next .next-step-tag { background: var(--rose-light); color: var(--rose); }
+  .clinic-next .next-step-tag { background: var(--teal-light); color: var(--teal); }
+
+  /* Remaining steps faded */
+  .next-step-card.pending { opacity: 0.45; }
+  .next-step-card.current { border-color: var(--rose); }
+  .clinic-next .next-step-card.current { border-color: var(--teal); }
+
+  /* Success screen */
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin: 0 auto 20px;
+  }
+  .patient-next .success-icon { background: var(--rose-light); }
+  .clinic-next .success-icon { background: var(--teal-light); }
+
+  /* Divider */
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--slate); margin-bottom: 12px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: LANDING
+═══════════════════════════════════════════ -->
+<div id="landing" class="screen active">
+  <div class="landing-bg"></div>
+  <div class="landing-inner">
+
+    <div class="logo-bar">
+      <div class="logo-dot">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="logo-text">Doktorabc Glow</span>
+    </div>
+
+    <div class="landing-badge">Now accepting patients · UK &amp; Europe</div>
+
+    <h1 class="landing-headline">
+      Aesthetic care<br>you can <em>trust.</em>
+    </h1>
+
+    <p class="landing-sub">
+      Botox and aesthetic injections — delivered through medically licensed practitioners, with full oversight and transparency from start to finish.
+    </p>
+
+    <div class="trust-row">
+      <div class="trust-pill">
+        <div class="trust-pill-icon" style="background:#F5E8EE;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9506E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="trust-pill-body">
+          <div class="trust-pill-title">Verified practitioners</div>
+          <div class="trust-pill-desc">Medically licensed &amp; background-checked</div>
+        </div>
+      </div>
+      <div class="trust-pill">
+        <div class="trust-pill-icon" style="background:#E0F4F2;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M20 6H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2z"/></svg>
+        </div>
+        <div class="trust-pill-body">
+          <div class="trust-pill-title">Doctor-supervised</div>
+          <div class="trust-pill-desc">Every treatment plan reviewed by a physician</div>
+        </div>
+      </div>
+      <div class="trust-pill">
+        <div class="trust-pill-icon" style="background:#EEF2FF;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="trust-pill-body">
+          <div class="trust-pill-title">Online pre-consult</div>
+          <div class="trust-pill-desc">Screen &amp; advise before you visit a clinic</div>
+        </div>
+      </div>
+      <div class="trust-pill">
+        <div class="trust-pill-icon" style="background:#F0FDF4;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div class="trust-pill-body">
+          <div class="trust-pill-title">GDPR compliant</div>
+          <div class="trust-pill-desc">Your data is encrypted &amp; never sold</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <div class="cta-label">I am looking for…</div>
+      <div class="cta-cards">
+        <button class="cta-card patient" onclick="startFlow('patient')">
+          <div class="cta-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div class="cta-card-content">
+            <div class="cta-card-title">Aesthetic treatment</div>
+            <div class="cta-card-desc">Find a verified injector near me</div>
+          </div>
+          <div class="cta-arrow">→</div>
+        </button>
+        <button class="cta-card clinic" onclick="startFlow('clinic')">
+          <div class="cta-icon" style="background: #E0F4F2;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="cta-card-content">
+            <div class="cta-card-title">Join as a clinic or practitioner</div>
+            <div class="cta-card-desc">Register your practice on Glow</div>
+          </div>
+          <div class="cta-arrow">→</div>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: PATIENT FLOW
+═══════════════════════════════════════════ -->
+<div id="patient-flow" class="screen patient-flow">
+
+  <div class="flow-header">
+    <button class="back-btn" onclick="goBack('patient')">← Back</button>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="patient-step-label">Step 1 of 4</span>
+        <span id="patient-step-name">About you</span>
+      </div>
+      <div class="step-dots" id="patient-dots"></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="patient-progress" style="width:25%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-content">
+
+    <!-- STEP 1: About you -->
+    <div class="step-panel active" id="p-step-1">
+      <h2 class="step-title">Let's get to know you</h2>
+      <p class="step-desc">This helps us match you with the right practitioner and check your suitability for treatment.</p>
+
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" placeholder="Your full name">
+      </div>
+      <div class="field">
+        <label>Date of birth</label>
+        <input type="date">
+      </div>
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <select>
+          <option value="">Select your country</option>
+          <option>United Kingdom</option>
+          <option>Germany</option>
+          <option>France</option>
+          <option>Switzerland</option>
+          <option>Poland</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- STEP 2: Treatment interest -->
+    <div class="step-panel" id="p-step-2">
+      <h2 class="step-title">What are you interested in?</h2>
+      <p class="step-desc">Select the areas you'd like to discuss. You're not committing to anything yet — this is just for your consultation.</p>
+
+      <div class="section-label">Treatment area</div>
+      <div class="option-grid">
+        <label class="option-card" onclick="selectOption(this)">
+          <input type="radio" name="treatment">
+          <span class="option-emoji">💆</span>
+          <div class="option-text">
+            <div class="option-label">Forehead lines (Botox)</div>
+            <div class="option-sublabel">Frown lines, horizontal lines</div>
+          </div>
+          <div class="option-radio"></div>
+        </label>
+        <label class="option-card" onclick="selectOption(this)">
+          <input type="radio" name="treatment">
+          <span class="option-emoji">👄</span>
+          <div class="option-text">
+            <div class="option-label">Lip enhancement</div>
+            <div class="option-sublabel">Volume, definition, symmetry</div>
+          </div>
+          <div class="option-radio"></div>
+        </label>
+        <label class="option-card" onclick="selectOption(this)">
+          <input type="radio" name="treatment">
+          <span class="option-emoji">✨</span>
+          <div class="option-text">
+            <div class="option-label">Cheek &amp; facial contouring</div>
+            <div class="option-sublabel">Cheekbones, jawline, chin</div>
+          </div>
+          <div class="option-radio"></div>
+        </label>
+        <label class="option-card" onclick="selectOption(this)">
+          <input type="radio" name="treatment">
+          <span class="option-emoji">👁️</span>
+          <div class="option-text">
+            <div class="option-label">Under-eye area</div>
+            <div class="option-sublabel">Tear troughs, dark circles</div>
+          </div>
+          <div class="option-radio"></div>
+        </label>
+        <label class="option-card" onclick="selectOption(this)">
+          <input type="radio" name="treatment">
+          <span class="option-emoji">🤔</span>
+          <div class="option-text">
+            <div class="option-label">Not sure yet</div>
+            <div class="option-sublabel">I'd like advice from a specialist</div>
+          </div>
+          <div class="option-radio"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- STEP 3: Medical screening -->
+    <div class="step-panel" id="p-step-3">
+      <h2 class="step-title">A few quick health questions</h2>
+      <p class="step-desc">Your safety comes first. These questions help our medical team ensure this treatment is right for you — all information is confidential.</p>
+
+      <div class="warn-card">
+        <span>⚠️</span>
+        <span>Please answer honestly — this is reviewed by a licensed doctor before any appointment is confirmed.</span>
+      </div>
+
+      <div class="section-label">Health screening</div>
+
+      <div class="check-item">
+        <input type="checkbox" id="q1">
+        <label for="q1" class="check-text"><strong>Are you pregnant or breastfeeding?</strong><br>Aesthetic injections are not suitable during pregnancy or breastfeeding.</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="q2">
+        <label for="q2" class="check-text"><strong>Do you have any known allergies to botulinum toxin or fillers?</strong></label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="q3">
+        <label for="q3" class="check-text"><strong>Are you currently taking blood thinners or anticoagulants?</strong><br>(e.g. warfarin, aspirin, heparin)</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="q4">
+        <label for="q4" class="check-text"><strong>Do you have any active skin conditions or infections</strong> in the intended treatment area?</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="q5">
+        <label for="q5" class="check-text"><strong>Have you had aesthetic injections in the past 3 months?</strong></label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="field">
+        <label>Anything else we should know?</label>
+        <textarea placeholder="Medications, conditions, previous treatments…"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 4: What happens next -->
+    <div class="step-panel" id="p-step-4">
+      <h2 class="step-title">You're almost there 🎉</h2>
+      <p class="step-desc">Here's exactly what happens after you submit — no surprises, no pressure.</p>
+
+      <div class="next-steps patient-next">
+        <div class="next-step-card current">
+          <div class="next-step-num">1</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Medical review</div>
+            <div class="next-step-desc">A licensed doctor reviews your responses to confirm suitability for treatment. This is done digitally — no appointment needed yet.</div>
+            <span class="next-step-tag">⏱ Within 24 hours</span>
+          </div>
+        </div>
+        <div class="next-step-card">
+          <div class="next-step-num">2</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Online consultation</div>
+            <div class="next-step-desc">If you're suitable, you'll receive a link to book a short video consultation with one of our verified practitioners to discuss your goals.</div>
+            <span class="next-step-tag">📅 You choose the time</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">3</div>
+          <div class="next-step-body">
+            <div class="next-step-title">In-clinic appointment</div>
+            <div class="next-step-desc">Once you're happy to proceed, you'll be matched with a verified clinic near you for your treatment.</div>
+            <span class="next-step-tag">📍 Near your location</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">4</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Follow-up &amp; care plan</div>
+            <div class="next-step-desc">After your treatment, we check in at 48h and 2 weeks to ensure you're happy with your results.</div>
+            <span class="next-step-tag">💬 Ongoing support</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <span class="info-icon">🔒</span>
+        <div class="info-text">Your data is encrypted and stored in line with GDPR. It will only be shared with your assigned medical team. <strong>You can request deletion at any time.</strong></div>
+      </div>
+    </div>
+
+    <!-- STEP 5: SUCCESS -->
+    <div class="step-panel" id="p-step-success">
+      <div style="text-align:center; padding: 40px 0 20px;">
+        <div class="success-icon patient-next">✨</div>
+        <h2 class="step-title" style="text-align:center; margin-bottom:10px;">Request submitted!</h2>
+        <p class="step-desc" style="text-align:center; max-width:300px; margin:0 auto 32px;">We'll review your information and be in touch within 24 hours.</p>
+      </div>
+
+      <div class="next-steps patient-next">
+        <div class="next-step-card current">
+          <div class="next-step-num">✓</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Submitted — medical review underway</div>
+            <div class="next-step-desc">A doctor will review your screening responses. You'll hear from us within 24 hours.</div>
+            <span class="next-step-tag">✅ Done</span>
+          </div>
+        </div>
+        <div class="next-step-card">
+          <div class="next-step-num">2</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Online consultation</div>
+            <div class="next-step-desc">You'll receive an email with a booking link to schedule your video consultation.</div>
+            <span class="next-step-tag">📧 Check your inbox</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">3</div>
+          <div class="next-step-body">
+            <div class="next-step-title">In-clinic appointment</div>
+            <div class="next-step-desc">Matched with a verified clinic near you.</div>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">4</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Follow-up &amp; care plan</div>
+            <div class="next-step-desc">Ongoing check-ins after your treatment.</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToLanding()" style="margin-top:8px;">← Back to home</button>
+    </div>
+
+  </div>
+
+  <div class="flow-footer">
+    <button class="btn-primary" id="patient-next-btn" onclick="patientNext()">
+      Continue <span>→</span>
+    </button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: CLINIC FLOW
+═══════════════════════════════════════════ -->
+<div id="clinic-flow" class="screen clinic-flow">
+
+  <div class="flow-header">
+    <button class="back-btn" onclick="goBack('clinic')">← Back</button>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="clinic-step-label">Step 1 of 4</span>
+        <span id="clinic-step-name">Clinic details</span>
+      </div>
+      <div class="step-dots" id="clinic-dots"></div>
+      <div class="progress-track">
+        <div class="progress-fill" id="clinic-progress" style="width:25%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-content">
+
+    <!-- STEP 1: Clinic info -->
+    <div class="step-panel active" id="c-step-1">
+      <h2 class="step-title">Tell us about your clinic</h2>
+      <p class="step-desc">Basic details about your practice. This information will be shown to patients who match with your clinic.</p>
+
+      <div class="field">
+        <label>Clinic / Practice name</label>
+        <input type="text" placeholder="e.g. The Aesthetic Clinic London">
+      </div>
+      <div class="field">
+        <label>Address</label>
+        <input type="text" placeholder="Street address">
+      </div>
+      <div class="field">
+        <label>City</label>
+        <input type="text" placeholder="City">
+      </div>
+      <div class="field">
+        <label>Country</label>
+        <select>
+          <option value="">Select country</option>
+          <option>United Kingdom</option>
+          <option>Germany</option>
+          <option>France</option>
+          <option>Switzerland</option>
+          <option>Poland</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Clinic phone number</label>
+        <input type="tel" placeholder="+44 …">
+      </div>
+      <div class="field">
+        <label>Clinic email</label>
+        <input type="email" placeholder="clinic@example.com">
+      </div>
+    </div>
+
+    <!-- STEP 2: Practitioner details -->
+    <div class="step-panel" id="c-step-2">
+      <h2 class="step-title">Lead practitioner</h2>
+      <p class="step-desc">Details of the primary injector. All practitioners must be medically licensed — we verify this during our review.</p>
+
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" placeholder="Dr. / Nurse …">
+      </div>
+      <div class="field">
+        <label>Medical title / role</label>
+        <select>
+          <option value="">Select role</option>
+          <option>Medical Doctor (MD / GP)</option>
+          <option>Dermatologist</option>
+          <option>Plastic Surgeon</option>
+          <option>Registered Nurse (aesthetic-trained)</option>
+          <option>Dentist (aesthetic-trained)</option>
+          <option>Other licensed practitioner</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Medical registration number</label>
+        <input type="text" placeholder="GMC / NMC / equivalent number">
+      </div>
+      <div class="field">
+        <label>Years of aesthetic experience</label>
+        <select>
+          <option value="">Select range</option>
+          <option>Less than 1 year</option>
+          <option>1–3 years</option>
+          <option>3–5 years</option>
+          <option>5–10 years</option>
+          <option>10+ years</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Languages spoken</label>
+        <input type="text" placeholder="e.g. English, French, German">
+      </div>
+    </div>
+
+    <!-- STEP 3: Upload documents -->
+    <div class="step-panel" id="c-step-3">
+      <h2 class="step-title">Upload credentials</h2>
+      <p class="step-desc">We require these documents to verify your practice before approving your listing. Files are encrypted and reviewed only by our medical compliance team.</p>
+
+      <div class="info-card">
+        <span class="info-icon">🕐</span>
+        <div class="info-text"><strong>Review time: 2 business days.</strong> Our compliance team manually verifies all documents. You'll receive an email once your application is approved or if we need anything further.</div>
+      </div>
+
+      <div class="section-label">Required documents</div>
+
+      <div class="upload-zone" onclick="fakeUpload(this, 'practitioner-license')">
+        <input type="file" id="practitioner-license">
+        <div class="upload-icon">📋</div>
+        <div class="upload-title">Practitioner medical licence</div>
+        <div class="upload-desc">GMC / NMC certificate or equivalent · PDF or image</div>
+      </div>
+
+      <div class="upload-zone" onclick="fakeUpload(this, 'clinic-license')">
+        <input type="file" id="clinic-license">
+        <div class="upload-icon">🏢</div>
+        <div class="upload-title">Clinic registration / CQC certificate</div>
+        <div class="upload-desc">Proof of regulated practice · PDF or image</div>
+      </div>
+
+      <div class="upload-zone" onclick="fakeUpload(this, 'insurance')">
+        <input type="file" id="insurance">
+        <div class="upload-icon">🛡️</div>
+        <div class="upload-title">Professional indemnity insurance</div>
+        <div class="upload-desc">Current policy document · PDF</div>
+      </div>
+
+      <p style="font-size:12px; color:var(--slate); margin-top:4px;">Maximum 10MB per file. Accepted: PDF, JPG, PNG.</p>
+    </div>
+
+    <!-- STEP 4: What happens next -->
+    <div class="step-panel" id="c-step-4">
+      <h2 class="step-title">Almost done — what to expect</h2>
+      <p class="step-desc">Here's the onboarding process after you submit your application.</p>
+
+      <div class="next-steps clinic-next">
+        <div class="next-step-card current">
+          <div class="next-step-num">1</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Compliance review</div>
+            <div class="next-step-desc">Our medical compliance team verifies your credentials and documents. We may contact you if anything is missing.</div>
+            <span class="next-step-tag">⏱ Within 2 business days</span>
+          </div>
+        </div>
+        <div class="next-step-card">
+          <div class="next-step-num">2</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Clinic visit (pilot phase)</div>
+            <div class="next-step-desc">During our pilot, an onboarding specialist will visit your clinic to complete setup, photograph the space, and walk through workflows.</div>
+            <span class="next-step-tag">📅 Scheduled by email</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">3</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Profile goes live</div>
+            <div class="next-step-desc">Your clinic is listed on Doktorabc Glow and you begin receiving matched patient referrals through the platform.</div>
+            <span class="next-step-tag">🚀 You're live</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">4</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Ongoing tools &amp; support</div>
+            <div class="next-step-desc">Access your practitioner dashboard: scheduling, patient records, treatment notes, and performance analytics.</div>
+            <span class="next-step-tag">📊 Full dashboard access</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <span class="info-icon">📧</span>
+        <div class="info-text">After submitting, watch for an email from <strong>onboarding@doktorabcglow.com</strong>. Add it to your contacts so it doesn't land in spam.</div>
+      </div>
+    </div>
+
+    <!-- STEP 5: SUCCESS -->
+    <div class="step-panel" id="c-step-success">
+      <div style="text-align:center; padding: 40px 0 20px;">
+        <div class="success-icon clinic-next">🏥</div>
+        <h2 class="step-title" style="text-align:center; margin-bottom:10px;">Application received!</h2>
+        <p class="step-desc" style="text-align:center; max-width:300px; margin:0 auto 32px;">Our compliance team will review your documents within 2 business days.</p>
+      </div>
+
+      <div class="next-steps clinic-next">
+        <div class="next-step-card current">
+          <div class="next-step-num">✓</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Application submitted</div>
+            <div class="next-step-desc">Documents and credentials are queued for review.</div>
+            <span class="next-step-tag">✅ Done</span>
+          </div>
+        </div>
+        <div class="next-step-card">
+          <div class="next-step-num">2</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Compliance review</div>
+            <div class="next-step-desc">Expect an email from us within 2 business days.</div>
+            <span class="next-step-tag">⏱ 2 business days</span>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">3</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Clinic visit scheduled</div>
+          </div>
+        </div>
+        <div class="next-step-card pending">
+          <div class="next-step-num">4</div>
+          <div class="next-step-body">
+            <div class="next-step-title">Profile live &amp; dashboard access</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToLanding()" style="margin-top:8px;">← Back to home</button>
+    </div>
+
+  </div>
+
+  <div class="flow-footer">
+    <button class="btn-primary" id="clinic-next-btn" onclick="clinicNext()">
+      Continue <span>→</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────────────────
+  let patientStep = 1;
+  let clinicStep  = 1;
+  const PATIENT_STEPS = 4;
+  const CLINIC_STEPS  = 4;
+
+  const patientStepNames = ['About you', 'Treatment interest', 'Health screening', 'Review & submit'];
+  const clinicStepNames  = ['Clinic details', 'Practitioner', 'Documents', 'Review & submit'];
+
+  // ── Navigation ─────────────────────────────────────────────────────────────
+  function startFlow(type) {
+    document.getElementById('landing').classList.remove('active');
+    document.getElementById(type + '-flow').classList.add('active');
+    if (type === 'patient') renderPatientProgress();
+    else renderClinicProgress();
+    window.scrollTo(0, 0);
+  }
+
+  function goToLanding() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('landing').classList.add('active');
+    patientStep = 1; clinicStep = 1;
+    resetFlow('patient'); resetFlow('clinic');
+    window.scrollTo(0, 0);
+  }
+
+  function goBack(type) {
+    if (type === 'patient') {
+      if (patientStep <= 1) { goToLanding(); return; }
+      showPatientStep(patientStep - 1);
+    } else {
+      if (clinicStep <= 1) { goToLanding(); return; }
+      showClinicStep(clinicStep - 1);
+    }
+  }
+
+  function resetFlow(type) {
+    const prefix = type === 'patient' ? 'p' : 'c';
+    const total  = type === 'patient' ? PATIENT_STEPS : CLINIC_STEPS;
+    document.querySelectorAll(`#${type}-flow .step-panel`).forEach(p => p.classList.remove('active'));
+    document.getElementById(`${prefix}-step-1`).classList.add('active');
+    if (type === 'patient') { patientStep = 1; renderPatientProgress(); }
+    else { clinicStep = 1; renderClinicProgress(); }
+    const btn = document.getElementById(`${type}-next-btn`);
+    btn.style.display = 'flex';
+  }
+
+  // ── Patient flow ───────────────────────────────────────────────────────────
+  function patientNext() {
+    if (patientStep < PATIENT_STEPS) {
+      showPatientStep(patientStep + 1);
+    } else {
+      // Submit
+      document.getElementById('p-step-4').classList.remove('active');
+      document.getElementById('p-step-success').classList.add('active');
+      document.getElementById('patient-next-btn').style.display = 'none';
+      document.querySelector('#patient-flow .flow-header').style.display = 'none';
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function showPatientStep(n) {
+    document.getElementById('p-step-' + patientStep).classList.remove('active');
+    patientStep = n;
+    document.getElementById('p-step-' + patientStep).classList.add('active');
+    renderPatientProgress();
+    document.querySelector('.flow-content').scrollTop = 0;
+    window.scrollTo(0, 0);
+    const btn = document.getElementById('patient-next-btn');
+    btn.innerHTML = patientStep === PATIENT_STEPS
+      ? 'Submit my request ✓'
+      : 'Continue <span>→</span>';
+  }
+
+  function renderPatientProgress() {
+    const pct = (patientStep / PATIENT_STEPS) * 100;
+    document.getElementById('patient-progress').style.width = pct + '%';
+    document.getElementById('patient-step-label').textContent = `Step ${patientStep} of ${PATIENT_STEPS}`;
+    document.getElementById('patient-step-name').textContent = patientStepNames[patientStep - 1];
+    renderDots('patient-dots', PATIENT_STEPS, patientStep, 'patient');
+  }
+
+  // ── Clinic flow ────────────────────────────────────────────────────────────
+  function clinicNext() {
+    if (clinicStep < CLINIC_STEPS) {
+      showClinicStep(clinicStep + 1);
+    } else {
+      document.getElementById('c-step-4').classList.remove('active');
+      document.getElementById('c-step-success').classList.add('active');
+      document.getElementById('clinic-next-btn').style.display = 'none';
+      document.querySelector('#clinic-flow .flow-header').style.display = 'none';
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function showClinicStep(n) {
+    document.getElementById('c-step-' + clinicStep).classList.remove('active');
+    clinicStep = n;
+    document.getElementById('c-step-' + clinicStep).classList.add('active');
+    renderClinicProgress();
+    document.querySelector('#clinic-flow .flow-content').scrollTop = 0;
+    window.scrollTo(0, 0);
+    const btn = document.getElementById('clinic-next-btn');
+    btn.innerHTML = clinicStep === CLINIC_STEPS
+      ? 'Submit application ✓'
+      : 'Continue <span>→</span>';
+  }
+
+  function renderClinicProgress() {
+    const pct = (clinicStep / CLINIC_STEPS) * 100;
+    document.getElementById('clinic-progress').style.width = pct + '%';
+    document.getElementById('clinic-step-label').textContent = `Step ${clinicStep} of ${CLINIC_STEPS}`;
+    document.getElementById('clinic-step-name').textContent = clinicStepNames[clinicStep - 1];
+    renderDots('clinic-dots', CLINIC_STEPS, clinicStep, 'clinic');
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function renderDots(containerId, total, current, type) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    for (let i = 1; i <= total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'step-dot';
+      if (i < current) dot.classList.add('done');
+      if (i === current) dot.classList.add('active');
+      container.appendChild(dot);
+    }
+  }
+
+  function selectOption(card) {
+    card.closest('.option-grid').querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+
+  function fakeUpload(zone, id) {
+    zone.classList.add('has-file');
+    zone.querySelector('.upload-icon').textContent = '✅';
+    zone.querySelector('.upload-title').textContent = 'File uploaded';
+    zone.querySelector('.upload-desc').textContent = 'Click to replace';
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  renderPatientProgress();
+  renderClinicProgress();
+</script>
+</body>
+</html>
