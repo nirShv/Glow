@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doktorabc Glow — Interactive Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #1C2B45;
+  --rose:       #C15068;
+  --rose-light: #F7ECEE;
+  --rose-mid:   #DDA0AD;
+  --teal:       #0C8F84;
+  --teal-light: #E4F5F3;
+  --amber:      #B45309;
+  --amber-light:#FEF3C7;
+  --green:      #16A34A;
+  --green-light:#DCFCE7;
+  --off:        #FAF7F5;
+  --card:       #FFFFFF;
+  --border:     #E8E4E0;
+  --slate:      #64748B;
+  --muted:      #94A3B8;
+  --text:       #1C2B45;
+  --shadow-sm:  0 1px 3px rgba(28,43,69,.07), 0 1px 2px rgba(28,43,69,.05);
+  --shadow:     0 4px 16px rgba(28,43,69,.09), 0 1px 4px rgba(28,43,69,.06);
+  --shadow-lg:  0 8px 32px rgba(28,43,69,.12);
+  --r:          14px;
+  --r-sm:       10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--off);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── LAYOUT ─────────────────────────────── */
+.page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 14px 96px;
+}
+
+/* ─── HEADER ─────────────────────────────── */
+.site-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  max-width: 720px; margin: 0 auto;
+  padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-mark {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--rose);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-mark svg { width: 14px; height: 14px; }
+.logo-name { font-size: 14px; font-weight: 700; color: var(--navy); letter-spacing: -.2px; }
+.logo-name span { color: var(--rose); }
+.proto-badge {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase;
+  background: var(--amber-light); color: var(--amber);
+  border: 1px solid rgba(180,83,9,.2);
+  border-radius: 100px; padding: 3px 9px;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* ─── INTRO ─── */
+.intro { padding: 20px 0 14px; }
+.intro-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; line-height: 1.25;
+  color: var(--navy); margin-bottom: 8px;
+}
+.intro-body { font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 8px; }
+.compliance-note {
+  display: flex; gap: 9px; align-items: flex-start;
+  background: var(--amber-light);
+  border: 1px solid rgba(180,83,9,.18);
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  font-size: 12px; color: var(--amber); line-height: 1.5;
+}
+.compliance-note svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ─── TOGGLE ─────────────────────────────── */
+.toggle-wrap {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px; margin-bottom: 18px; gap: 4px;
+}
+.toggle-btn {
+  flex: 1; padding: 10px 8px;
+  border: none; background: none;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+  color: var(--slate);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; /* touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+.toggle-btn.active { background: var(--navy); color: white; }
+.toggle-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* ─── PANEL ──────────────────────────────── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ─── CARD ───────────────────────────────── */
+.card {
+  background: var(--card);
+  border: none;
+  border-radius: var(--r);
+  padding: 20px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 8px rgba(28,43,69,.07);
+}
+.card-header {
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .4px; text-transform: uppercase;
+  color: var(--muted);
+}
+.card-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── HERO CARD ──────────────────────────── */
+.hero-card {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 20px 16px 22px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgba(28,43,69,.07);
+  position: relative; overflow: hidden;
+}
+.hero-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px;
+  background: radial-gradient(ellipse at top right, rgba(193,80,104,.06) 0%, transparent 70%);
+  pointer-events: none; border-radius: var(--r);
+}
+.hero-greeting {
+  font-size: 11px; font-weight: 600;
+  color: var(--rose); letter-spacing: .5px;
+  text-transform: uppercase; margin-bottom: 5px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; color: var(--navy);
+  line-height: 1.2; margin-bottom: 8px;
+}
+.hero-sub {
+  font-size: 13px; color: var(--slate);
+  line-height: 1.55; margin-bottom: 18px;
+}
+.hero-actions {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.hero-card.provider { border-top: 3px solid var(--teal); }
+.hero-card.provider .hero-greeting { color: var(--teal); }
+.hero-card.provider .hero-title { color: var(--navy); }
+.hero-card.provider::before {
+  background: radial-gradient(ellipse at top right, rgba(12,143,132,.07) 0%, transparent 70%);
+}
+
+/* ─── BUTTONS ────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 18px;
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .18s;
+  border: none; text-decoration: none;
+  white-space: nowrap;
+  min-height: 46px; /* touch target */
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: #0C7A72; color: white; box-shadow: 0 2px 10px rgba(12,122,114,.2); }
+.btn-primary:hover { background: #0a6a63; }
+.btn-primary-teal { background: var(--navy); color: white; box-shadow: 0 2px 10px rgba(28,43,69,.18); }
+.btn-primary-teal:hover { background: #14223a; }
+.btn-ghost { background: transparent; color: var(--slate); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--off); color: var(--navy); border-color: var(--navy); }
+.btn-glow-ghost { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.18); }
+.btn-glow-ghost:hover { background: rgba(255,255,255,.2); }
+.btn-outline { background: transparent; color: var(--slate); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+.btn-full { width: 100%; justify-content: center; }
+.btn-sm { padding: 8px 14px; font-size: 13px; min-height: 38px; }
+
+/* ─── STEPPER ────────────────────────────── */
+.stepper { display: flex; flex-direction: column; gap: 0; }
+.step-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding-bottom: 16px; position: relative;
+}
+.step-row:not(:last-child)::before {
+  content: '';
+  position: absolute; left: 15px; top: 32px;
+  width: 2px; bottom: 0;
+  background: var(--border);
+}
+.step-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; font-weight: 700;
+  border: 2px solid var(--border);
+  background: var(--card); color: var(--muted);
+  position: relative; z-index: 1;
+}
+.step-dot.done  { background: var(--green-light); border-color: var(--green); color: var(--green); }
+.step-dot.active{ background: var(--rose-light); border-color: var(--rose); color: var(--rose); }
+.step-dot.next  { background: #EEF2FF; border-color: #6366F1; color: #6366F1; }
+.step-dot.prov  { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+.step-body { flex: 1; padding-top: 5px; }
+.step-label {
+  font-size: 13px; font-weight: 700; color: var(--navy);
+  display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+}
+.step-desc { font-size: 12px; color: var(--slate); margin-top: 2px; }
+.step-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: .4px;
+  text-transform: uppercase; border-radius: 100px; padding: 2px 8px;
+}
+.tag-done   { background: var(--green-light); color: var(--green); }
+.tag-active { background: var(--rose-light); color: var(--rose); }
+.tag-next   { background: #EEF2FF; color: #6366F1; }
+.tag-later  { background: var(--border); color: var(--muted); }
+
+/* ─── TREATMENT PLAN ─────────────────────── */
+.plan-field {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.plan-field:last-child { border-bottom: none; }
+.plan-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: var(--muted); margin-bottom: 3px;
+}
+.plan-value { font-size: 14px; color: var(--navy); font-weight: 500; }
+.plan-note  { font-size: 12px; color: var(--slate); margin-top: 2px; }
+
+/* ─── CHECKLIST ──────────────────────────── */
+.check-list { display: flex; flex-direction: column; gap: 10px; }
+.check-row  { display: flex; align-items: flex-start; gap: 10px; }
+.check-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.check-icon svg { width: 11px; height: 11px; }
+.check-text { font-size: 13px; color: var(--text); line-height: 1.4; }
+
+/* ─── PROVIDER CARD ──────────────────────── */
+.provider-profile {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding-bottom: 14px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.provider-avatar {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, #DDA0AD 0%, #C15068 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: white;
+  flex-shrink: 0; font-family: 'Playfair Display', serif;
+}
+.provider-name { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.provider-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--teal-light); color: var(--teal);
+  font-size: 10px; font-weight: 700; letter-spacing: .3px;
+  text-transform: uppercase; border-radius: 100px;
+  padding: 2px 8px; margin-bottom: 3px;
+}
+.provider-role  { font-size: 12px; color: var(--slate); }
+.provider-details { display: flex; flex-direction: column; gap: 7px; }
+.detail-row {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--slate);
+}
+.detail-row svg { flex-shrink: 0; }
+.detail-row strong { color: var(--navy); }
+.stars { color: #F59E0B; font-size: 12px; }
+
+/* ─── GLOW PASS ──────────────────────────── */
+.glow-pass {
+  background: #2D1B4E;
+  border-radius: var(--r); padding: 18px 16px;
+  margin-bottom: 12px; position: relative; overflow: hidden;
+}
+.glow-pass::after { display: none; }
+.gp-label   { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--rose-mid); margin-bottom: 4px; }
+.gp-title   { font-family: 'Playfair Display', serif; font-size: 20px; color: white; margin-bottom: 2px; }
+.gp-price   { font-size: 26px; font-weight: 700; color: white; margin-bottom: 2px; }
+.gp-price span { font-size: 14px; font-weight: 400; color: rgba(255,255,255,.6); }
+.gp-subtitle{ font-size: 12px; color: rgba(255,255,255,.6); margin-bottom: 14px; line-height: 1.5; }
+.gp-benefits { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
+.gp-benefit { display: flex; align-items: center; gap: 9px; font-size: 13px; color: rgba(255,255,255,.85); }
+.gp-benefit-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.gp-guardrail {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; padding: 10px 12px;
+  font-size: 11px; color: rgba(255,255,255,.6);
+  line-height: 1.5; margin-bottom: 14px;
+}
+
+/* ─── TIMELINE ───────────────────────────── */
+.timeline { display: flex; flex-direction: column; gap: 10px; }
+.tl-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 4px 0 12px; border-bottom: 1px solid var(--border);
+}
+.tl-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 700;
+}
+.tl-dot.t1 { background: var(--rose-light); color: var(--rose); }
+.tl-dot.t2 { background: var(--teal-light); color: var(--teal); }
+.tl-dot.t3 { background: #EEF2FF; color: #6366F1; }
+.tl-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+.tl-desc  { font-size: 12px; color: var(--slate); margin-top: 2px; }
+.tl-note  { margin-top: 10px; font-size: 12px; color: var(--slate); font-style: italic; line-height: 1.5; }
+.tl-row:last-child { border-bottom: none; }
+
+/* ─── FORM ───────────────────────────────── */
+.form-section { margin-bottom: 20px; }
+.form-section-title {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+}
+.field { margin-bottom: 11px; }
+.field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--navy); margin-bottom: 5px;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 12px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px; /* prevents iOS zoom */
+  color: var(--navy); background: var(--card);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none; appearance: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(12,143,132,.1);
+}
+.field textarea { resize: none; min-height: 80px; }
+
+/* field-row: single column on mobile, 2-col on tablet+ */
+.field-row { display: flex; flex-direction: column; gap: 0; }
+
+/* ─── RESPONSIBILITY SPLIT ───────────────── */
+.resp-split {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.resp-col { border-radius: var(--r-sm); padding: 14px; }
+.resp-col.doktorabc { background: var(--rose-light); border: 1px solid rgba(193,80,104,.15); }
+.resp-col.clinic    { background: var(--teal-light); border: 1px solid rgba(12,143,132,.15); }
+.resp-col-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .4px;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.resp-col.doktorabc .resp-col-title { color: var(--rose); }
+.resp-col.clinic    .resp-col-title { color: var(--teal); }
+.resp-item {
+  font-size: 12px; color: var(--text);
+  padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,.06); line-height: 1.4;
+}
+.resp-item:last-child { border-bottom: none; }
+
+/* ─── VALUE PROPS ────────────────────────── */
+.value-grid { display: flex; flex-direction: column; gap: 14px; }
+.value-row  { display: flex; gap: 12px; align-items: flex-start; }
+.value-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.value-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.value-desc  { font-size: 12px; color: var(--slate); line-height: 1.45; }
+
+/* ─── MODAL ──────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(28,43,69,.5);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 0 0 env(safe-area-inset-bottom, 20px);
+  width: 100%; max-width: 720px;
+  max-height: 88vh; overflow-y: auto;
+  transform: translateY(50px);
+  transition: transform .3s cubic-bezier(.32,1,.27,1);
+  -webkit-overflow-scrolling: touch;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 100px;
+  background: var(--border); margin: 12px auto 18px;
+}
+.modal-inner { padding: 0 16px 16px; }
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--navy); margin-bottom: 12px;
+}
+.modal-body { font-size: 14px; color: var(--slate); line-height: 1.65; margin-bottom: 18px; }
+.modal-body p + p { margin-top: 10px; }
+.modal-body strong { color: var(--navy); }
+.modal-actions { display: flex; flex-direction: column; gap: 8px; }
+
+/* ─── SECTION DIVIDER ────────────────────── */
+.section-divider {
+  display: flex; align-items: center; gap: 10px;
+  margin: 20px 0 14px; color: var(--muted);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ─── INFO NOTE ──────────────────────────── */
+.info-note {
+  display: flex; gap: 9px;
+  background: #F0F9FF; border: 1px solid #BAE6FD;
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  font-size: 12px; color: #0369A1; line-height: 1.5; margin-bottom: 12px;
+}
+.info-note svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ─── MOBILE BOTTOM CTA ──────────────────── */
+.mobile-cta {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 10px 14px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--off) 60%, transparent);
+  display: flex; gap: 8px; z-index: 90;
+}
+
+/* ─── FOOTER ─────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 14px;
+  text-align: center;
+}
+.footer-main { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.footer-note { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ─── UTILITY ────────────────────────────── */
+.mt-4 { margin-top: 14px; }
+
+/* ═══════════════════════════════════════════
+   TABLET & DESKTOP ENHANCEMENTS
+   (mobile is default above)
+═══════════════════════════════════════════ */
+@media (min-width: 480px) {
+  .hero-actions  { flex-direction: row; flex-wrap: wrap; }
+  .modal-actions { flex-direction: row; }
+  .resp-split    { flex-direction: row; }
+  .resp-col      { flex: 1; }
+  .field-row     { flex-direction: row; gap: 10px; }
+  .field-row .field { flex: 1; margin-bottom: 11px; }
+}
+
+@media (min-width: 540px) {
+  .mobile-cta {
+    max-width: 720px;
+    left: 50%; transform: translateX(-50%);
+    right: auto; width: 100%;
+  }
+  .page    { padding: 0 20px 96px; }
+  .card    { padding: 20px; }
+  .hero-card { padding: 24px 20px; }
+  .intro-title { font-size: 24px; }
+  .hero-title  { font-size: 24px; }
+}
+
+@media (min-width: 720px) {
+  .intro-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="logo-name">Doktorabc <span>Glow</span></div>
+    </div>
+    <span class="proto-badge">Interactive Prototype</span>
+  </div>
+</header>
+
+<!-- ═══ PAGE ══════════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- TOGGLE -->
+  <div style="height:8px;"></div>
+  <div class="toggle-wrap">
+    <button class="toggle-btn active" id="tab-patient" onclick="switchPanel('patient')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Patient Panel
+    </button>
+    <button class="toggle-btn" id="tab-provider" onclick="switchPanel('provider')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Provider Onboarding
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       PANEL A — PATIENT
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="patient-panel" class="panel active">
+
+    <!-- Hero -->
+    <div class="hero-card">
+      <div class="hero-greeting">Welcome back</div>
+      <h2 class="hero-title">Emma, your Glow journey<br>is in progress</h2>
+      <p class="hero-sub">You have completed initial screening. The next step is to book an in-person consultation with a verified Glow provider.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="openModal('booking-modal')">Book clinic visit</button>
+        <button class="btn btn-ghost" onclick="openModal('safety-modal')">View safety details</button>
+      </div>
+    </div>
+
+    <!-- Journey stepper -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Your treatment journey</div>
+        
+      </div>
+      <div class="stepper">
+        <div class="step-row">
+          <div class="step-dot done">✓</div>
+          <div class="step-body">
+            <div class="step-label">Learn <span class="step-tag tag-done">Completed</span></div>
+            <div class="step-desc">Treatment information, expectations and safety basics.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-dot done">✓</div>
+          <div class="step-body">
+            <div class="step-label">Screen <span class="step-tag tag-done">Completed</span></div>
+            <div class="step-desc">Medical intake and goal capture.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-dot active">→</div>
+          <div class="step-body">
+            <div class="step-label">Pre-consult <span class="step-tag tag-active">In progress</span></div>
+            <div class="step-desc">Clinical review and preliminary recommendation.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-dot next">4</div>
+          <div class="step-body">
+            <div class="step-label">Book clinic visit <span class="step-tag tag-next">Next</span></div>
+            <div class="step-desc">Choose verified provider and location.</div>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-dot" style="color:var(--muted);">5</div>
+          <div class="step-body">
+            <div class="step-label">Follow-up &amp; recall <span class="step-tag tag-later">Later</span></div>
+            <div class="step-desc">Outcome review, check-ins and safe re-treatment reminders.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Treatment plan -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Recommended next step</div>
+        
+      </div>
+      <p style="font-size:14px;color:var(--navy);font-weight:600;margin-bottom:16px;">Book an in-person consultation with a verified Glow provider.</p>
+      <div class="plan-field">
+        <div class="plan-label">Treatment interest</div>
+        <div class="plan-value">Botulinum toxin · Forehead / frown lines</div>
+      </div>
+      <div class="plan-field">
+        <div class="plan-label">Estimated price range</div>
+        <div class="plan-value" style="color:var(--rose);">€180 – €320</div>
+        <div class="plan-note">Final quote confirmed by provider in person</div>
+      </div>
+      <div class="plan-field">
+        <div class="plan-label">Clinical note</div>
+        <div class="plan-note">Final quote, eligibility, prescription where required and treatment decision are confirmed in person.</div>
+      </div>
+      <div class="plan-field">
+        <div class="plan-label">Care model</div>
+        <div class="plan-note">Digital guidance and preparation · In-clinic clinical decision and treatment · Digital follow-up</div>
+      </div>
+      <button class="btn btn-primary btn-full mt-4" onclick="openModal('booking-modal')">Continue to booking →</button>
+    </div>
+
+    <!-- Safety checklist -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Safety gates</div>
+        
+      </div>
+      <div class="check-list">
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Medical intake completed</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">No automatic prescription</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Verified provider required</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">In-person assessment required</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Informed consent before treatment</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Product batch / lot recorded</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">48h and 14-day follow-up included</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Adverse-event escalation path available</div></div>
+      </div>
+      <button class="btn btn-outline btn-full mt-4" onclick="openModal('safety-modal')">View safety details</button>
+    </div>
+
+    <!-- Matched provider -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Matched provider</div>
+        
+      </div>
+      <div class="provider-profile">
+        <div class="provider-avatar">MK</div>
+        <div>
+          <div class="provider-name">Dr. Maria Keller</div>
+          <div class="provider-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Verified Glow Provider
+          </div>
+          <div class="provider-role">GP with aesthetic medicine certification</div>
+        </div>
+      </div>
+      <div class="provider-details">
+        <div class="detail-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Berlin Mitte
+        </div>
+        <div class="detail-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span><strong>4.8</strong> <span class="stars">★★★★★</span></span>
+        </div>
+        <div class="detail-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Next available: <strong>Thursday, 17:30</strong>
+        </div>
+        <div class="detail-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          English, German
+        </div>
+      </div>
+      <div class="info-note mt-4">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Provider verified: license, insurance, training, clinic setup
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="openModal('booking-modal')">Book clinic visit</button>
+        <button class="btn btn-outline" onclick="openModal('credentials-modal')">View credentials</button>
+      </div>
+    </div>
+
+    <!-- Glow Pass -->
+    <div class="glow-pass">
+      <div class="gp-label">Membership</div>
+      <div class="gp-title">Glow Pass</div>
+      <div class="gp-price">€29 <span>/ month</span></div>
+      <div class="gp-subtitle">A membership for continuity of care, not automatic injections.</div>
+      <div class="gp-benefits">
+        <div class="gp-benefit"><div class="gp-benefit-dot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Free virtual pre-consults</div>
+        <div class="gp-benefit"><div class="gp-benefit-dot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Priority booking with verified providers</div>
+        <div class="gp-benefit"><div class="gp-benefit-dot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Treatment history &amp; photo progress storage</div>
+        <div class="gp-benefit"><div class="gp-benefit-dot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Member pricing on eligible treatments</div>
+        <div class="gp-benefit"><div class="gp-benefit-dot"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Safe recall reminders &amp; annual care plan</div>
+      </div>
+      <div class="gp-guardrail">Membership does not guarantee treatment. Every treatment still requires clinical eligibility and provider approval.</div>
+      <button class="btn btn-ghost" onclick="openModal('glowpass-modal')">View membership benefits</button>
+    </div>
+
+    <!-- Follow-up -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Aftercare &amp; recall</div>
+        
+      </div>
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-dot t1">48h</div>
+          <div class="tl-body">
+            <div class="tl-title">48-hour check-in</div>
+            <div class="tl-desc">How are you feeling? Any unexpected symptoms?</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-dot t2">14d</div>
+          <div class="tl-body">
+            <div class="tl-title">14-day outcome review</div>
+            <div class="tl-desc">Track satisfaction, capture follow-up needs and update treatment history.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-dot t3">↻</div>
+          <div class="tl-body">
+            <div class="tl-title">Safe recall window</div>
+            <div class="tl-desc">Reminder appears when the patient may be ready to consider re-treatment, subject to clinical review.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-note">The recall loop supports retention, but clinical eligibility is checked every time.</div>
+    </div>
+
+  </div><!-- /patient-panel -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       PANEL B — PROVIDER
+  ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="provider-panel" class="panel">
+
+    <!-- Hero -->
+    <div class="hero-card provider">
+      <div class="hero-greeting">Supply-side onboarding</div>
+      <h2 class="hero-title">Join Doktorabc Glow as a verified provider</h2>
+      <p class="hero-sub">A separate onboarding flow for clinics and practitioners: credentials, compliance, capacity and quality.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary-teal" onclick="document.getElementById('provider-form-card').scrollIntoView({behavior:'smooth'})">Start provider onboarding</button>
+        <button class="btn btn-ghost" onclick="openModal('requirements-modal')">View requirements</button>
+      </div>
+    </div>
+
+    <!-- Provider supply funnel stepper -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Provider supply funnel</div>
+        
+      </div>
+      <div class="stepper">
+        <div class="step-row"><div class="step-dot prov">1</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Source</div><div class="step-desc">Identify qualified clinics and practitioners.</div></div></div>
+        <div class="step-row"><div class="step-dot prov">2</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Qualify</div><div class="step-desc">Confirm treatment scope, location and clinical setup.</div></div></div>
+        <div class="step-row"><div class="step-dot prov">3</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Verify</div><div class="step-desc">Check license, insurance, training and medical registration.</div></div></div>
+        <div class="step-row"><div class="step-dot prov">4</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Onboard</div><div class="step-desc">Configure workflows, consent, records and aftercare.</div></div></div>
+        <div class="step-row"><div class="step-dot prov">5</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Activate slots</div><div class="step-desc">Open appointment capacity and provider profile.</div></div></div>
+        <div class="step-row"><div class="step-dot prov">6</div><div class="step-body"><div class="step-label" style="color:var(--teal);">Monitor quality</div><div class="step-desc">Track attendance, outcomes, complaints and retention.</div></div></div>
+      </div>
+      <p style="font-size:12px;color:var(--slate);margin-top:12px;font-style:italic;line-height:1.5;">⤷
+        Provider acquisition is not just recruitment. The key is activating safe, bookable capacity.</p>
+    </div>
+
+    <!-- Provider application form -->
+    <div class="card" id="provider-form-card">
+      <div class="card-header">
+        <div class="card-title">Provider application</div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Clinic details</div>
+        <div class="field">
+          <label>Clinic or practitioner name</label>
+          <input type="text" placeholder="e.g. Dr. Maria Keller Clinic">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Country</label>
+            <select id="country-select" onchange="updateRegNote()">
+              <option value="">Select country</option>
+              <option value="uk">United Kingdom</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+              <option value="ch">Switzerland</option>
+              <option value="pl">Poland</option>
+              <option value="nl">Netherlands</option>
+              <option value="ie">Ireland</option>
+              <option value="es">Spain</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input type="text" placeholder="City">
+          </div>
+        </div>
+        <div id="reg-note" class="compliance-note" style="display:none;margin-bottom:12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="reg-note-text"></span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Practitioner details</div>
+        <div class="field">
+          <label>Provider type</label>
+          <select>
+            <option value="">Select type</option>
+            <option>Doctor</option>
+            <option>Dentist</option>
+            <option>Dermatologist</option>
+            <option>GP with aesthetic training</option>
+            <option>Nurse practitioner (where allowed)</option>
+            <option>Clinic owner</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Medical registration / license number</label>
+          <input type="text" placeholder="GMC / NMC / equivalent">
+        </div>
+        <div class="field">
+          <label>Insurance coverage</label>
+          <select>
+            <option value="">Select</option>
+            <option>Yes — in place</option>
+            <option>No</option>
+            <option>In progress</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Capacity &amp; scope</div>
+        <div class="field">
+          <label>Aesthetic procedures offered</label>
+          <select>
+            <option value="">Select primary</option>
+            <option>Botulinum toxin</option>
+            <option>Dermal fillers</option>
+            <option>Skin boosters</option>
+            <option>Hyperhidrosis treatment</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Monthly capacity</label>
+            <select>
+              <option value="">Select</option>
+              <option>1–20 appointments</option>
+              <option>21–50 appointments</option>
+              <option>51–100 appointments</option>
+              <option>100+ appointments</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Product supply path</label>
+            <select>
+              <option value="">Select</option>
+              <option>Existing authorised supplier</option>
+              <option>Need supplier setup</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary-teal btn-full" onclick="openModal('submitted-modal')">Continue to verification →</button>
+    </div>
+
+    <!-- Verification checklist -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Verification requirements</div>
+        
+      </div>
+      <div class="check-list" style="--check-color:var(--teal);--check-bg:var(--teal-light);">
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Medical registration verified</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Insurance documentation uploaded</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Aesthetic training reviewed</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Clinic location suitable for treatment</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Product procurement path validated</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Consent and record workflow accepted</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Adverse-event escalation contact provided</div></div>
+        <div class="check-row"><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="check-text">Data handling and GDPR requirements accepted</div></div>
+      </div>
+      <button class="btn btn-primary-teal btn-full mt-4" onclick="openModal('submitted-modal')">Submit for review</button>
+    </div>
+
+    <!-- Why providers join -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Why providers join</div>
+      </div>
+      <div class="value-grid">
+        <div class="value-row">
+          <div class="value-icon" style="background:var(--off);border:1px solid var(--border);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div><div class="value-title">Qualified demand</div><div class="value-desc">Patients arrive pre-screened with clear goals and expectations.</div></div>
+        </div>
+        <div class="value-row">
+          <div class="value-icon" style="background:var(--off);border:1px solid var(--border);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div><div class="value-title">Lower admin burden</div><div class="value-desc">Booking, reminders, payments, aftercare and records are structured.</div></div>
+        </div>
+        <div class="value-row">
+          <div class="value-icon" style="background:var(--off);border:1px solid var(--border);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div><div class="value-title">Trust and reputation</div><div class="value-desc">Verified profile, reviews and outcome history support patient confidence.</div></div>
+        </div>
+        <div class="value-row">
+          <div class="value-icon" style="background:var(--off);border:1px solid var(--border);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div><div class="value-title">Repeat-client growth</div><div class="value-desc">Recall reminders and Glow Pass help patients return safely.</div></div>
+        </div>
+        <div class="value-row">
+          <div class="value-icon" style="background:var(--off);border:1px solid var(--border);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div><div class="value-title">Workflow tools</div><div class="value-desc">Calendar, CRM, consent, analytics and quality monitoring.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Responsibility split -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Responsibility model</div>
+      </div>
+      <div class="resp-split">
+        <div class="resp-col doktorabc">
+          <div class="resp-col-title">Doktorabc owns</div>
+          <div class="resp-item">Acquisition campaigns</div>
+          <div class="resp-item">Patient guidance</div>
+          <div class="resp-item">Journey orchestration</div>
+          <div class="resp-item">Pre-screening</div>
+          <div class="resp-item">Booking &amp; payment</div>
+          <div class="resp-item">Shared records</div>
+          <div class="resp-item">Check-ins &amp; recall</div>
+        </div>
+        <div class="resp-col clinic">
+          <div class="resp-col-title">Clinic / provider owns</div>
+          <div class="resp-item">Final eligibility</div>
+          <div class="resp-item">Prescription (where required)</div>
+          <div class="resp-item">Informed consent</div>
+          <div class="resp-item">Treatment delivery</div>
+          <div class="resp-item">Product traceability</div>
+          <div class="resp-item">Clinical escalation</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /provider-panel -->
+
+</div><!-- /page -->
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<div style="height:32px;"></div>
+<footer class="site-footer">
+  <div class="footer-main">Doktorabc Glow prototype · Product assessment demo · Not a medical product</div>
+  <div class="footer-note">This prototype is illustrative and does not represent live clinical guidance, treatment approval or medical advice.</div>
+</footer>
+
+<!-- ═══ MOBILE BOTTOM CTA ═════════════════════════════════════════════════════ -->
+<div class="mobile-cta" id="mobile-cta">
+  <button class="btn btn-primary" style="flex:1;" onclick="openModal('booking-modal')">Book clinic visit</button>
+</div>
+
+<!-- ═══ MODALS ════════════════════════════════════════════════════════════════ -->
+
+<!-- Booking modal -->
+<div class="modal-overlay" id="booking-modal" onclick="closeOnOverlay(event,'booking-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Prototype booking</div>
+      <div class="modal-body">
+        <p>In the real product, this step would reserve a clinic slot, collect a deposit and share the patient's structured brief with the selected provider.</p>
+        <p>The provider receives a summary including treatment interest, screening responses, relevant health notes and the patient's stated goals — no raw medical data is shared without consent.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal('booking-modal')">Got it</button>
+        <button class="btn btn-outline" onclick="closeModal('booking-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Safety modal -->
+<div class="modal-overlay" id="safety-modal" onclick="closeOnOverlay(event,'safety-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">How Glow protects the journey</div>
+      <div class="modal-body">
+        <p>Doktorabc prepares the patient and provider with structured information, but does not replace clinical judgement. The provider confirms final eligibility, prescription where required, consent and treatment on-site.</p>
+        <p><strong>Doktorabc owns:</strong> patient guidance, pre-screening, booking, payment, records, check-ins and recall.</p>
+        <p><strong>Clinic / provider owns:</strong> final eligibility, prescription where required, informed consent, treatment delivery, product traceability and clinical escalation.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal('safety-modal')">Understood</button>
+        <button class="btn btn-outline" onclick="closeModal('safety-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Glow Pass modal -->
+<div class="modal-overlay" id="glowpass-modal" onclick="closeOnOverlay(event,'glowpass-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Glow Pass benefits</div>
+      <div class="modal-body">
+        <p>Glow Pass helps patients plan, finance and maintain treatment safely over time. It supports continuity, follow-up and rebooking without creating pressure to treat.</p>
+        <p><strong>Included:</strong> virtual pre-consults, priority booking, treatment timeline, photo tracking, member pricing and safe recall reminders.</p>
+        <p>Membership does not guarantee treatment. Every treatment still requires clinical eligibility and provider approval.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal('glowpass-modal')">Got it</button>
+        <button class="btn btn-outline" onclick="closeModal('glowpass-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Credentials modal -->
+<div class="modal-overlay" id="credentials-modal" onclick="closeOnOverlay(event,'credentials-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Verified provider profile</div>
+      <div class="modal-body">
+        <p>This provider has completed Doktorabc Glow onboarding, including credential verification, insurance check, clinical setting validation and workflow training.</p>
+        <p>Verification shown in this prototype is illustrative.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal('credentials-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Submitted modal -->
+<div class="modal-overlay" id="submitted-modal" onclick="closeOnOverlay(event,'submitted-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Provider application received</div>
+      <div class="modal-body">
+        <p>In a real product, Doktorabc Ops would review credentials, validate the clinical setup and approve the provider before any patient bookings are activated.</p>
+        <p>Review time: <strong>2 business days.</strong> You will receive a confirmation email with next steps, including scheduling a clinic visit during the pilot phase.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary-teal" onclick="closeModal('submitted-modal');switchPanel('patient')">Back to patient panel</button>
+        <button class="btn btn-outline" onclick="closeModal('submitted-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Requirements modal -->
+<div class="modal-overlay" id="requirements-modal" onclick="closeOnOverlay(event,'requirements-modal')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Provider requirements</div>
+      <div class="modal-body">
+        <p><strong>To join Doktorabc Glow, providers must hold:</strong></p>
+        <p>Valid medical registration (GMC, NMC, or equivalent per country) · Current professional indemnity insurance · Documented aesthetic training · Suitable clinical premises · Authorised product supply path · Compliance with local prescribing regulations</p>
+        <p>All credentials are verified by the Doktorabc compliance team before any patient bookings are activated.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary-teal" onclick="closeModal('requirements-modal');document.getElementById('provider-form-card').scrollIntoView({behavior:'smooth'})">Start application</button>
+        <button class="btn btn-outline" onclick="closeModal('requirements-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Panel toggle ──────────────────────────────────────────────────────────────
+function switchPanel(panel) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(panel + '-panel').classList.add('active');
+  document.getElementById('tab-' + panel).classList.add('active');
+  document.getElementById('mobile-cta').style.display = panel === 'provider' ? 'none' : 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Modals ────────────────────────────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeOnOverlay(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ── Country regulation note ───────────────────────────────────────────────────
+const regNotes = {
+  uk: 'UK (MHRA 2021): Botulinum toxin is prescription-only. Remote prescribing for cosmetics is not permitted. Face-to-face assessment by a prescriber is required before treatment.',
+  de: 'Germany: Prescription-only. Only doctors may administer aesthetic injections. In-person sign-off required for cosmetic prescriptions.',
+  fr: 'France: Doctors only (médecins). Téléconsultation is legal since 2019, but in-person assessment is expected for injectable treatments.',
+  ch: 'Switzerland (Swissmedic): Prescription-only, non-EU jurisdiction. Separate homologation may be required. In-person assessment expected.',
+  pl: 'Poland: Prescription-only. No explicit ban on remote prescribing for cosmetics. Enforcement framework is less developed — a more flexible market for digital-first models.',
+  nl: 'Netherlands: Prescription-only. KNMG guidelines apply. In-person assessment is standard for injectable treatments.',
+  ie: 'Ireland: Following UK-aligned regulation. HPRA oversight. In-person assessment recommended.',
+  es: 'Spain: Prescription-only. AEMPS oversight. In-person assessment required by clinical standards.',
+};
+function updateRegNote() {
+  const val = document.getElementById('country-select').value;
+  const note = document.getElementById('reg-note');
+  const text = document.getElementById('reg-note-text');
+  if (val && regNotes[val]) {
+    text.textContent = regNotes[val];
+    note.style.display = 'flex';
+  } else {
+    note.style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>
